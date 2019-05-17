@@ -1,0 +1,3317 @@
+/*
+ * Copyright 2006-2018 Prowide
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.financial.swift.model.mt.mt6xx;
+
+
+
+import com.financial.Generated;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Collections;
+
+import org.apache.commons.lang3.StringUtils;
+
+import com.financial.swift.model.*;
+import com.financial.swift.internal.*;
+import com.financial.swift.internal.SequenceStyle.Type;
+import com.financial.swift.model.field.*;
+import com.financial.swift.model.mt.AbstractMT;
+import com.financial.swift.utils.Lib;
+import java.io.File;
+import java.io.InputStream;
+import java.io.IOException;
+
+/**
+ * <strong>MT 620 - Commodity Fixed Loan/Deposit Confirmation</strong>
+ *
+ * <p>
+ * SWIFT MT620 (ISO 15022) message structure:
+ * <br>
+ <div class="scheme"><ul>
+<li class="sequence">
+Sequence A (M)<ul><li class="field">Field 15 A (M)</li>
+<li class="field">Field 20  (M)</li>
+<li class="field">Field 21  (O)</li>
+<li class="field">Field 22 A (M)</li>
+<li class="field">Field 94 A (O)</li>
+<li class="field">Field 22 B (M)</li>
+<li class="field">Field 21 N (O)</li>
+<li class="field">Field 82 A,D,J (M)</li>
+<li class="field">Field 87 A,D,J (M)</li>
+<li class="field">Field 83 A,D,J (O)</li>
+<li class="field">Field 26 C (M)</li>
+<li class="field">Field 77 D (O)</li>
+</ul></li>
+<li class="sequence">
+Sequence B (M)<ul><li class="field">Field 15 B (M)</li>
+<li class="field">Field 17 R (M)</li>
+<li class="field">Field 30 T (M)</li>
+<li class="field">Field 30 V (M)</li>
+<li class="field">Field 30 P (M)</li>
+<li class="field">Field 32 B,F (M)</li>
+<li class="field">Field 32 H,R (O)</li>
+<li class="field">Field 30 X (O)</li>
+<li class="field">Field 34 E,J (M)</li>
+<li class="field">Field 37 G (M)</li>
+<li class="field">Field 14 D (M)</li>
+<li class="field">Field 30 F (O)</li>
+<li class="field">Field 38 J (O)</li>
+</ul></li>
+<li class="sequence">
+Sequence C (M)<ul><li class="field">Field 15 C (M)</li>
+<li class="field">Field 53 A,D,J (O)</li>
+<li class="field">Field 86 A,D,J (O)</li>
+<li class="field">Field 56 A,D,J (O)</li>
+<li class="field">Field 57 A,D,J (M)</li>
+<li class="field">Field 58 A,D,J (O)</li>
+</ul></li>
+<li class="sequence">
+Sequence D (M)<ul><li class="field">Field 15 D (M)</li>
+<li class="field">Field 53 A,D,J (O)</li>
+<li class="field">Field 86 A,D,J (O)</li>
+<li class="field">Field 56 A,D,J (O)</li>
+<li class="field">Field 57 A,D,J (M)</li>
+<li class="field">Field 58 A,D,J (O)</li>
+</ul></li>
+<li class="sequence">
+Sequence E (O)<ul><li class="field">Field 15 E (M)</li>
+<li class="field">Field 53 A,D,J (O)</li>
+<li class="field">Field 86 A,D,J (O)</li>
+<li class="field">Field 56 A,D,J (O)</li>
+<li class="field">Field 57 A,D,J (M)</li>
+<li class="field">Field 58 A,D,J (O)</li>
+</ul></li>
+<li class="sequence">
+Sequence F (O)<ul><li class="field">Field 15 F (M)</li>
+<li class="field">Field 53 A,D,J (O)</li>
+<li class="field">Field 86 A,D,J (O)</li>
+<li class="field">Field 56 A,D,J (O)</li>
+<li class="field">Field 57 A,D,J (M)</li>
+<li class="field">Field 58 A,D,J (O)</li>
+</ul></li>
+<li class="sequence">
+Sequence G (O)<ul><li class="field">Field 15 G (M)</li>
+<li class="sequence">
+Sequence G1 (M)<ul><li class="field">Field 37 L (M)</li>
+<li class="field">Field 33 B,J (M)</li>
+</ul></li>
+<li class="sequence">
+Sequence G2 (O)<ul><li class="field">Field 36  (O)</li>
+<li class="field">Field 33 E,J (O)</li>
+</ul></li>
+</ul></li>
+<li class="sequence">
+Sequence H (O)<ul><li class="field">Field 15 H (M)</li>
+<li class="field">Field 29 A (O)</li>
+<li class="field">Field 24 D (O)</li>
+<li class="field">Field 84 A,B,D,J (O)</li>
+<li class="field">Field 85 A,B,D,J (O)</li>
+<li class="field">Field 88 A,D,J (O)</li>
+<li class="field">Field 71 F (O)</li>
+<li class="field">Field 26 H (O)</li>
+<li class="field">Field 21 G (O)</li>
+<li class="field">Field 22 Z (O)</li>
+<li class="field">Field 72  (O)</li>
+</ul></li>
+</ul></div>
+
+ *
+ * <p>
+ * This source code is specific to release <strong>SRU 2018</strong>
+ * <p>
+ * For additional resources check <a href="https://www.singlee.financial.com/resources">https://www.singlee.financial.com/resources</a>
+ */
+@Generated
+public class MT620 extends AbstractMT implements Serializable {
+	/**
+	 * Constant identifying the SRU to which this class belongs to.
+	 */
+	public static final int SRU = 2018;
+	private static final long serialVersionUID = 1L;
+	private static final transient java.util.logging.Logger log = java.util.logging.Logger.getLogger(MT620.class.getName());
+	
+	/**
+	* Constant for MT name, this is part of the classname, after <code>MT</code>
+	*/
+	public static final String NAME = "620";
+	
+// begin qualifiers constants	
+
+	/**
+	* Constant for qualifier with value 30E/360 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String _30E_360 = "30E/360";
+
+	/**
+	* Constant for qualifier with value 360/360 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String _360_360 = "360/360";
+
+	/**
+	* Constant for qualifier with value ACT/360 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String ACT_360 = "ACT/360";
+
+	/**
+	* Constant for qualifier with value ACT/365 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String ACT_365 = "ACT/365";
+
+	/**
+	* Constant for qualifier with value AFI/365 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String AFI_365 = "AFI/365";
+
+	/**
+	* Constant for qualifier with value AGNT 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String AGNT = "AGNT";
+
+	/**
+	* Constant for qualifier with value ALLOC 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String ALLOC = "ALLOC";
+
+	/**
+	* Constant for qualifier with value ALUM 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String ALUM = "ALUM";
+
+	/**
+	* Constant for qualifier with value AMEG 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String AMEG = "AMEG";
+
+	/**
+	* Constant for qualifier with value AMND 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String AMND = "AMND";
+
+	/**
+	* Constant for qualifier with value ANUG 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String ANUG = "ANUG";
+
+	/**
+	* Constant for qualifier with value B 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String B = "B";
+
+	/**
+	* Constant for qualifier with value BILA 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String BILA = "BILA";
+
+	/**
+	* Constant for qualifier with value BRIT 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String BRIT = "BRIT";
+
+	/**
+	* Constant for qualifier with value BROK 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String BROK = "BROK";
+
+	/**
+	* Constant for qualifier with value CANC 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String CANC = "CANC";
+
+	/**
+	* Constant for qualifier with value CFR 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String CFR = "CFR";
+
+	/**
+	* Constant for qualifier with value CIF 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String CIF = "CIF";
+
+	/**
+	* Constant for qualifier with value CIP 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String CIP = "CIP";
+
+	/**
+	* Constant for qualifier with value COIN 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String COIN = "COIN";
+
+	/**
+	* Constant for qualifier with value CONF 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String CONF = "CONF";
+
+	/**
+	* Constant for qualifier with value COPP 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String COPP = "COPP";
+
+	/**
+	* Constant for qualifier with value CORO 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String CORO = "CORO";
+
+	/**
+	* Constant for qualifier with value CPT 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String CPT = "CPT";
+
+	/**
+	* Constant for qualifier with value D 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String D = "D";
+
+	/**
+	* Constant for qualifier with value DAF 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String DAF = "DAF";
+
+	/**
+	* Constant for qualifier with value DDP 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String DDP = "DDP";
+
+	/**
+	* Constant for qualifier with value DDU 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String DDU = "DDU";
+
+	/**
+	* Constant for qualifier with value DEQ 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String DEQ = "DEQ";
+
+	/**
+	* Constant for qualifier with value DES 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String DES = "DES";
+
+	/**
+	* Constant for qualifier with value DTD 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String DTD = "DTD";
+
+	/**
+	* Constant for qualifier with value DUCA 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String DUCA = "DUCA";
+
+	/**
+	* Constant for qualifier with value DUPL 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String DUPL = "DUPL";
+
+	/**
+	* Constant for qualifier with value ELEC 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String ELEC = "ELEC";
+
+	/**
+	* Constant for qualifier with value EXW 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String EXW = "EXW";
+
+	/**
+	* Constant for qualifier with value FAS 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String FAS = "FAS";
+
+	/**
+	* Constant for qualifier with value FCA 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String FCA = "FCA";
+
+	/**
+	* Constant for qualifier with value FOB 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String FOB = "FOB";
+
+	/**
+	* Constant for qualifier with value FRFR 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String FRFR = "FRFR";
+
+	/**
+	* Constant for qualifier with value GECU 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String GECU = "GECU";
+
+	/**
+	* Constant for qualifier with value GOLD 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String GOLD = "GOLD";
+
+	/**
+	* Constant for qualifier with value IRID 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String IRID = "IRID";
+
+	/**
+	* Constant for qualifier with value KRUG 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String KRUG = "KRUG";
+
+	/**
+	* Constant for qualifier with value L 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String L = "L";
+
+	/**
+	* Constant for qualifier with value LBTY 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String LBTY = "LBTY";
+
+	/**
+	* Constant for qualifier with value LEAD 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String LEAD = "LEAD";
+
+	/**
+	* Constant for qualifier with value LOC 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String LOC = "LOC";
+
+	/**
+	* Constant for qualifier with value M 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String M = "M";
+
+	/**
+	* Constant for qualifier with value MAPL 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String MAPL = "MAPL";
+
+	/**
+	* Constant for qualifier with value MATU 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String MATU = "MATU";
+
+	/**
+	* Constant for qualifier with value MEXP 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String MEXP = "MEXP";
+
+	/**
+	* Constant for qualifier with value NBUF 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String NBUF = "NBUF";
+
+	/**
+	* Constant for qualifier with value NEWT 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String NEWT = "NEWT";
+
+	/**
+	* Constant for qualifier with value NICK 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String NICK = "NICK";
+
+	/**
+	* Constant for qualifier with value NOBL 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String NOBL = "NOBL";
+
+	/**
+	* Constant for qualifier with value NSOV 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String NSOV = "NSOV";
+
+	/**
+	* Constant for qualifier with value OSMI 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String OSMI = "OSMI";
+
+	/**
+	* Constant for qualifier with value OSOV 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String OSOV = "OSOV";
+
+	/**
+	* Constant for qualifier with value OTH 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String OTH = "OTH";
+
+	/**
+	* Constant for qualifier with value OTHR 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String OTHR = "OTHR";
+
+	/**
+	* Constant for qualifier with value PALL 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String PALL = "PALL";
+
+	/**
+	* Constant for qualifier with value PHON 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String PHON = "PHON";
+
+	/**
+	* Constant for qualifier with value PLAT 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String PLAT = "PLAT";
+
+	/**
+	* Constant for qualifier with value POIL 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String POIL = "POIL";
+
+	/**
+	* Constant for qualifier with value RHOD 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String RHOD = "RHOD";
+
+	/**
+	* Constant for qualifier with value ROLL 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String ROLL = "ROLL";
+
+	/**
+	* Constant for qualifier with value RUTH 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String RUTH = "RUTH";
+
+	/**
+	* Constant for qualifier with value SAEG 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String SAEG = "SAEG";
+
+	/**
+	* Constant for qualifier with value SECU 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String SECU = "SECU";
+
+	/**
+	* Constant for qualifier with value SILV 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String SILV = "SILV";
+
+	/**
+	* Constant for qualifier with value STAT 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String STAT = "STAT";
+
+	/**
+	* Constant for qualifier with value STEE 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String STEE = "STEE";
+
+	/**
+	* Constant for qualifier with value TINA 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String TINA = "TINA";
+
+	/**
+	* Constant for qualifier with value TITA 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String TITA = "TITA";
+
+	/**
+	* Constant for qualifier with value UNALL 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String UNALL = "UNALL";
+
+	/**
+	* Constant for qualifier with value VREN 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String VREN = "VREN";
+
+	/**
+	* Constant for qualifier with value ZINC 
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public static final String ZINC = "ZINC";
+
+// end qualifiers constants	
+
+	/**
+	 * Creates an MT620 initialized with the parameter SwiftMessage
+	 * @param m swift message with the MT620 content
+	 */
+	public MT620(SwiftMessage m) {
+		super(m);
+		sanityCheck(m);
+	}
+
+	/**
+	 * Creates an MT620 initialized with the parameter MtSwiftMessage.
+	 * @param m swift message with the MT620 content, the parameter can not be null
+	 * @see #MT620(String)
+	 */
+	public MT620(MtSwiftMessage m) {
+		this(m.message());
+	}
+	
+	/**
+	 * Creates an MT620 initialized with the parameter MtSwiftMessage.
+	 *
+	 * @param m swift message with the MT620 content
+	 * @return the created object or null if the parameter is null
+	 * @see #MT620(String)
+	 * @since 7.7
+	 */
+	public static MT620 parse(MtSwiftMessage m) {
+		if (m == null) {
+			return null;
+		}
+		return new MT620(m);
+	}
+	
+	/**
+	 * Creates and initializes a new MT620 input message setting TEST BICS as sender and receiver.<br>
+	 * All mandatory header attributes are completed with default values.
+	 *
+	 * @since 7.6
+	 */
+	public MT620() {
+		this(BIC.TEST8, BIC.TEST8);
+	}
+	
+	/**
+	 * Creates and initializes a new MT620 input message from sender to receiver.<br>
+	 * All mandatory header attributes are completed with default values. 
+	 * In particular the sender and receiver addresses will be filled with proper default LT identifier 
+	 * and branch codes if not provided,
+	 * 
+	 * @param sender the sender address as a bic8, bic11 or full logical terminal consisting of 12 characters
+	 * @param receiver the receiver address as a bic8, bic11 or full logical terminal consisting of 12 characters
+	 * @since 7.7
+	 */
+	public MT620(final String sender, final String receiver) {
+		super(620, sender, receiver);
+	}
+	
+	/**
+	* <em>DO NOT USE THIS METHOD</em>
+	* It is kept for compatibility but will be removed very soon, since the
+	* <code>messageType</code> parameter is actually ignored.
+	*
+	* @param messageType the message type number
+    * @param sender the sender address as a bic8, bic11 or full logical terminal consisting of 12 characters
+	* @param receiver the receiver address as a bic8, bic11 or full logical terminal consisting of 12 characters
+	* @see #MT620(String, String)
+	* @deprecated Use instead <code>new MT620(sender, receiver)</code> instead
+	*/
+	@Deprecated
+	@com.financial.deprecation.ProwideDeprecated(phase4=com.financial.deprecation.TargetYear._2019)
+	public MT620(final int messageType, final String sender, final String receiver) {
+		super(620, sender, receiver);
+		com.financial.deprecation.DeprecationUtils.phase3(getClass(), "MT620(int, String, String)", "Use the constructor MT620(sender, receiver) instead.");
+	}
+	
+	/**
+	 * Creates a new MT620 by parsing a String with the message content in its swift FIN format.<br>
+	 * If the fin parameter is null or the message cannot be parsed, the internal message object
+	 * will be initialized (blocks will be created) but empty.<br>
+	 * If the string contains multiple messages, only the first one will be parsed.
+	 *
+	 * @param fin a string with the MT message in its FIN swift format
+	 * @since 7.7
+	 */
+	public MT620(final String fin) {
+		super();
+		if (fin != null) {
+			final SwiftMessage parsed = read(fin);
+			if (parsed != null) {
+				super.m = parsed;
+				sanityCheck(parsed);
+			}
+		}
+    }
+    
+    private void sanityCheck(final SwiftMessage param) {
+    	if (param.isServiceMessage()) {
+			log.warning("Creating an MT620 object from FIN content with a Service Message. Check if the MT620 you are intended to read is prepended with and ACK.");
+		} else if (!StringUtils.equals(param.getType(), getMessageType())) {
+			log.warning("Creating an MT620 object from FIN content with message type "+param.getType());
+		}
+    }
+	
+	/**
+	 * Creates a new MT620 by parsing a String with the message content in its swift FIN format.<br>
+	 * If the fin parameter cannot be parsed, the returned MT620 will have its internal message object
+	 * initialized (blocks will be created) but empty.<br>
+	 * If the string contains multiple messages, only the first one will be parsed. 
+	 *
+	 * @param fin a string with the MT message in its FIN swift format. <em>fin may be null in which case this method returns null</em>
+	 * @return a new instance of MT620 or null if fin is null 
+	 * @since 7.7
+	 */
+	public static MT620 parse(final String fin) {
+		if (fin == null) {
+			return null;
+		}
+		return new MT620(fin);
+    }
+    
+    /**
+	 * Creates a new MT620 by parsing a input stream with the message content in its swift FIN format, using "UTF-8" as encoding.<br>
+	 * If the message content is null or cannot be parsed, the internal message object
+	 * will be initialized (blocks will be created) but empty.<br>
+	 * If the stream contains multiple messages, only the first one will be parsed.
+	 *
+	 * @param stream an input stream in UTF-8 encoding with the MT message in its FIN swift format.
+	 * @throws IOException if the stream data cannot be read
+	 * @since 7.7
+	 */
+	public MT620(final InputStream stream) throws IOException {
+		this(Lib.readStream(stream));
+    }
+    
+    /**
+	 * Creates a new MT620 by parsing a input stream with the message content in its swift FIN format, using "UTF-8" as encoding.<br>
+	 * If the stream contains multiple messages, only the first one will be parsed.
+	 *
+	 * @param stream an input stream in UTF-8 encoding with the MT message in its FIN swift format.
+	 * @return a new instance of MT620 or null if stream is null or the message cannot be parsed 
+	 * @throws IOException if the stream data cannot be read
+	 * @since 7.7
+	 */
+	public static MT620 parse(final InputStream stream) throws IOException {
+		if (stream == null) {
+			return null;
+		}
+		return new MT620(stream);
+    }
+    
+    /**
+	 * Creates a new MT620 by parsing a file with the message content in its swift FIN format.<br>
+	 * If the file content is null or cannot be parsed as a message, the internal message object
+	 * will be initialized (blocks will be created) but empty.<br>
+	 * If the file contains multiple messages, only the first one will be parsed.
+	 *
+	 * @param file a file with the MT message in its FIN swift format.
+	 * @throws IOException if the file content cannot be read
+	 * @since 7.7
+	 */
+	public MT620(final File file) throws IOException {
+		this(Lib.readFile(file));
+    }
+    
+    /**
+	 * Creates a new MT620 by parsing a file with the message content in its swift FIN format.<br>
+	 * If the file contains multiple messages, only the first one will be parsed.
+	 *
+	 * @param file a file with the MT message in its FIN swift format.
+	 * @return a new instance of MT620 or null if; file is null, does not exist, can't be read, is not a file or the message cannot be parsed
+	 * @throws IOException if the file content cannot be read
+	 * @since 7.7
+	 */
+	public static MT620 parse(final File file) throws IOException {
+		if (file == null) {
+			return null;
+		}
+		return new MT620(file);
+    }
+    
+	/**
+	 * Returns this MT number
+	 * @return the message type number of this MT
+	 * @since 6.4
+	 */
+	@Override
+	public String getMessageType() {
+		return "620";
+	}
+
+	/**
+	 * Add all tags from block to the end of the block4.
+	 *
+	 * @param block to append
+	 * @return this object to allow method chaining
+	 * @since 7.6
+	 */
+	@Override
+	public MT620 append(final SwiftTagListBlock block) {
+		super.append(block);
+		return this;
+	}
+	
+	/**
+	 * Add all tags to the end of the block4.
+	 *
+	 * @param tags to append
+	 * @return this object to allow method chaining
+	 * @since 7.6
+	 */
+	@Override
+	public MT620 append(final Tag ... tags) {
+		super.append(tags);
+		return this;
+	}
+	
+	/**
+	 * Add all the fields to the end of the block4.
+	 *
+	 * @param fields to append
+	 * @return this object to allow method chaining
+	 * @since 7.6
+	 */
+	@Override
+	public MT620 append(final Field ... fields) {
+		super.append(fields);
+		return this;
+	}
+
+    /**
+	 * Creates an MT620 messages from its JSON representation.
+	 * <p>
+	 * For generic conversion of JSON into the corresopnding MT instance
+	 * see {@link AbstractMT#fromJson(String)}
+	 *
+	 * @param json a JSON representation of an MT620 message
+	 * @return a new instance of MT620
+	 * @since 7.10.3
+	 */
+	public final static MT620 fromJson(String json) {
+		return (MT620) AbstractMT.fromJson(json);
+	}
+
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 15A, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 15A at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field15A object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field15A getField15A() {
+		final Tag t = tag("15A");
+		if (t != null) {
+			return new Field15A(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 20, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 20 at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field20 object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field20 getField20() {
+		final Tag t = tag("20");
+		if (t != null) {
+			return new Field20(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 21, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 21 at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field21 object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field21 getField21() {
+		final Tag t = tag("21");
+		if (t != null) {
+			return new Field21(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 22A, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 22A at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field22A object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field22A getField22A() {
+		final Tag t = tag("22A");
+		if (t != null) {
+			return new Field22A(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 94A, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 94A at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field94A object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field94A getField94A() {
+		final Tag t = tag("94A");
+		if (t != null) {
+			return new Field94A(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 22B, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 22B at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field22B object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field22B getField22B() {
+		final Tag t = tag("22B");
+		if (t != null) {
+			return new Field22B(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 21N, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 21N at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field21N object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field21N getField21N() {
+		final Tag t = tag("21N");
+		if (t != null) {
+			return new Field21N(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 82A, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 82A at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field82A object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field82A getField82A() {
+		final Tag t = tag("82A");
+		if (t != null) {
+			return new Field82A(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 82D, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 82D at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field82D object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field82D getField82D() {
+		final Tag t = tag("82D");
+		if (t != null) {
+			return new Field82D(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 82J, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 82J at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field82J object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field82J getField82J() {
+		final Tag t = tag("82J");
+		if (t != null) {
+			return new Field82J(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 87A, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 87A at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field87A object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field87A getField87A() {
+		final Tag t = tag("87A");
+		if (t != null) {
+			return new Field87A(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 87D, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 87D at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field87D object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field87D getField87D() {
+		final Tag t = tag("87D");
+		if (t != null) {
+			return new Field87D(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 87J, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 87J at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field87J object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field87J getField87J() {
+		final Tag t = tag("87J");
+		if (t != null) {
+			return new Field87J(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 83A, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 83A at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field83A object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field83A getField83A() {
+		final Tag t = tag("83A");
+		if (t != null) {
+			return new Field83A(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 83D, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 83D at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field83D object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field83D getField83D() {
+		final Tag t = tag("83D");
+		if (t != null) {
+			return new Field83D(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 83J, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 83J at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field83J object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field83J getField83J() {
+		final Tag t = tag("83J");
+		if (t != null) {
+			return new Field83J(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 26C, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 26C at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field26C object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field26C getField26C() {
+		final Tag t = tag("26C");
+		if (t != null) {
+			return new Field26C(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 77D, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 77D at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field77D object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field77D getField77D() {
+		final Tag t = tag("77D");
+		if (t != null) {
+			return new Field77D(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 15B, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 15B at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field15B object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field15B getField15B() {
+		final Tag t = tag("15B");
+		if (t != null) {
+			return new Field15B(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 17R, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 17R at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field17R object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field17R getField17R() {
+		final Tag t = tag("17R");
+		if (t != null) {
+			return new Field17R(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 30T, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 30T at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field30T object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field30T getField30T() {
+		final Tag t = tag("30T");
+		if (t != null) {
+			return new Field30T(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 30V, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 30V at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field30V object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field30V getField30V() {
+		final Tag t = tag("30V");
+		if (t != null) {
+			return new Field30V(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 30P, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 30P at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field30P object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field30P getField30P() {
+		final Tag t = tag("30P");
+		if (t != null) {
+			return new Field30P(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 32B, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 32B at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field32B object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field32B getField32B() {
+		final Tag t = tag("32B");
+		if (t != null) {
+			return new Field32B(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 32F, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 32F at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field32F object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field32F getField32F() {
+		final Tag t = tag("32F");
+		if (t != null) {
+			return new Field32F(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 32H, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 32H at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field32H object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field32H getField32H() {
+		final Tag t = tag("32H");
+		if (t != null) {
+			return new Field32H(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 32R, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 32R at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field32R object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field32R getField32R() {
+		final Tag t = tag("32R");
+		if (t != null) {
+			return new Field32R(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 30X, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 30X at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field30X object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field30X getField30X() {
+		final Tag t = tag("30X");
+		if (t != null) {
+			return new Field30X(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 34E, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 34E at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field34E object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field34E getField34E() {
+		final Tag t = tag("34E");
+		if (t != null) {
+			return new Field34E(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 34J, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 34J at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field34J object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field34J getField34J() {
+		final Tag t = tag("34J");
+		if (t != null) {
+			return new Field34J(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 37G, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 37G at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field37G object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field37G getField37G() {
+		final Tag t = tag("37G");
+		if (t != null) {
+			return new Field37G(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 14D, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 14D at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field14D object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field14D getField14D() {
+		final Tag t = tag("14D");
+		if (t != null) {
+			return new Field14D(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 30F, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 30F at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field30F object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field30F getField30F() {
+		final Tag t = tag("30F");
+		if (t != null) {
+			return new Field30F(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 38J, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 38J at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field38J object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field38J getField38J() {
+		final Tag t = tag("38J");
+		if (t != null) {
+			return new Field38J(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 15C, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 15C at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field15C object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field15C getField15C() {
+		final Tag t = tag("15C");
+		if (t != null) {
+			return new Field15C(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 15D, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 15D at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field15D object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field15D getField15D() {
+		final Tag t = tag("15D");
+		if (t != null) {
+			return new Field15D(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 15E, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 15E at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field15E object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field15E getField15E() {
+		final Tag t = tag("15E");
+		if (t != null) {
+			return new Field15E(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 15F, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 15F at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field15F object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field15F getField15F() {
+		final Tag t = tag("15F");
+		if (t != null) {
+			return new Field15F(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 15G, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 15G at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field15G object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field15G getField15G() {
+		final Tag t = tag("15G");
+		if (t != null) {
+			return new Field15G(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 37L, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 37L at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field37L object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field37L getField37L() {
+		final Tag t = tag("37L");
+		if (t != null) {
+			return new Field37L(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 33B, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 33B at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field33B object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field33B getField33B() {
+		final Tag t = tag("33B");
+		if (t != null) {
+			return new Field33B(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 36, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 36 at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field36 object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field36 getField36() {
+		final Tag t = tag("36");
+		if (t != null) {
+			return new Field36(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 33E, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 33E at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field33E object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field33E getField33E() {
+		final Tag t = tag("33E");
+		if (t != null) {
+			return new Field33E(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 15H, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 15H at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field15H object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field15H getField15H() {
+		final Tag t = tag("15H");
+		if (t != null) {
+			return new Field15H(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 29A, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 29A at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field29A object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field29A getField29A() {
+		final Tag t = tag("29A");
+		if (t != null) {
+			return new Field29A(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 24D, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 24D at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field24D object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field24D getField24D() {
+		final Tag t = tag("24D");
+		if (t != null) {
+			return new Field24D(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 84A, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 84A at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field84A object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field84A getField84A() {
+		final Tag t = tag("84A");
+		if (t != null) {
+			return new Field84A(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 84B, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 84B at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field84B object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field84B getField84B() {
+		final Tag t = tag("84B");
+		if (t != null) {
+			return new Field84B(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 84D, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 84D at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field84D object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field84D getField84D() {
+		final Tag t = tag("84D");
+		if (t != null) {
+			return new Field84D(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 84J, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 84J at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field84J object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field84J getField84J() {
+		final Tag t = tag("84J");
+		if (t != null) {
+			return new Field84J(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 85A, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 85A at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field85A object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field85A getField85A() {
+		final Tag t = tag("85A");
+		if (t != null) {
+			return new Field85A(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 85B, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 85B at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field85B object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field85B getField85B() {
+		final Tag t = tag("85B");
+		if (t != null) {
+			return new Field85B(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 85D, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 85D at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field85D object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field85D getField85D() {
+		final Tag t = tag("85D");
+		if (t != null) {
+			return new Field85D(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 85J, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 85J at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field85J object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field85J getField85J() {
+		final Tag t = tag("85J");
+		if (t != null) {
+			return new Field85J(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 88A, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 88A at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field88A object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field88A getField88A() {
+		final Tag t = tag("88A");
+		if (t != null) {
+			return new Field88A(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 88D, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 88D at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field88D object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field88D getField88D() {
+		final Tag t = tag("88D");
+		if (t != null) {
+			return new Field88D(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 88J, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 88J at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field88J object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field88J getField88J() {
+		final Tag t = tag("88J");
+		if (t != null) {
+			return new Field88J(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 71F, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 71F at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field71F object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field71F getField71F() {
+		final Tag t = tag("71F");
+		if (t != null) {
+			return new Field71F(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 26H, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 26H at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field26H object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field26H getField26H() {
+		final Tag t = tag("26H");
+		if (t != null) {
+			return new Field26H(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 21G, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 21G at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field21G object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field21G getField21G() {
+		final Tag t = tag("21G");
+		if (t != null) {
+			return new Field21G(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 22Z, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 22Z at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field22Z object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field22Z getField22Z() {
+		final Tag t = tag("22Z");
+		if (t != null) {
+			return new Field22Z(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return the first one whose name matches 72, 
+	 * or null if none is found.<br>
+	 * The first occurrence of field 72 at MT620 is expected to be the only one.
+	 * 
+	 * @return a Field72 object or null if the field is not found
+	 * @see SwiftTagListBlock#getTagByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public Field72 getField72() {
+		final Tag t = tag("72");
+		if (t != null) {
+			return new Field72(t.getValue());
+		} else {
+			return null;
+		}
+	}
+	
+	/**
+	 * Iterates through block4 fields and return all occurrences of fields whose names matches 53A, 
+	 * or <code>Collections.emptyList()</code> if none is found.<br>
+	 * Multiple occurrences of field 53A at MT620 are expected at one sequence or across several sequences.
+	 * 
+	 * @return a List of Field53A objects or <code>Collections.emptyList()</code> if none is not found
+	 * @see SwiftTagListBlock#getTagsByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public List<Field53A> getField53A() {
+		final List<Field53A> result = new ArrayList<Field53A>();
+		final Tag[] tags = tags("53A");
+		if (tags != null && tags.length > 0) {
+            for (Tag tag : tags) {
+                result.add(new Field53A(tag.getValue()));
+            }
+		}
+		return result;
+	}
+	
+	/**
+	 * Iterates through block4 fields and return all occurrences of fields whose names matches 53D, 
+	 * or <code>Collections.emptyList()</code> if none is found.<br>
+	 * Multiple occurrences of field 53D at MT620 are expected at one sequence or across several sequences.
+	 * 
+	 * @return a List of Field53D objects or <code>Collections.emptyList()</code> if none is not found
+	 * @see SwiftTagListBlock#getTagsByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public List<Field53D> getField53D() {
+		final List<Field53D> result = new ArrayList<Field53D>();
+		final Tag[] tags = tags("53D");
+		if (tags != null && tags.length > 0) {
+            for (Tag tag : tags) {
+                result.add(new Field53D(tag.getValue()));
+            }
+		}
+		return result;
+	}
+	
+	/**
+	 * Iterates through block4 fields and return all occurrences of fields whose names matches 53J, 
+	 * or <code>Collections.emptyList()</code> if none is found.<br>
+	 * Multiple occurrences of field 53J at MT620 are expected at one sequence or across several sequences.
+	 * 
+	 * @return a List of Field53J objects or <code>Collections.emptyList()</code> if none is not found
+	 * @see SwiftTagListBlock#getTagsByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public List<Field53J> getField53J() {
+		final List<Field53J> result = new ArrayList<Field53J>();
+		final Tag[] tags = tags("53J");
+		if (tags != null && tags.length > 0) {
+            for (Tag tag : tags) {
+                result.add(new Field53J(tag.getValue()));
+            }
+		}
+		return result;
+	}
+	
+	/**
+	 * Iterates through block4 fields and return all occurrences of fields whose names matches 86A, 
+	 * or <code>Collections.emptyList()</code> if none is found.<br>
+	 * Multiple occurrences of field 86A at MT620 are expected at one sequence or across several sequences.
+	 * 
+	 * @return a List of Field86A objects or <code>Collections.emptyList()</code> if none is not found
+	 * @see SwiftTagListBlock#getTagsByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public List<Field86A> getField86A() {
+		final List<Field86A> result = new ArrayList<Field86A>();
+		final Tag[] tags = tags("86A");
+		if (tags != null && tags.length > 0) {
+            for (Tag tag : tags) {
+                result.add(new Field86A(tag.getValue()));
+            }
+		}
+		return result;
+	}
+	
+	/**
+	 * Iterates through block4 fields and return all occurrences of fields whose names matches 86D, 
+	 * or <code>Collections.emptyList()</code> if none is found.<br>
+	 * Multiple occurrences of field 86D at MT620 are expected at one sequence or across several sequences.
+	 * 
+	 * @return a List of Field86D objects or <code>Collections.emptyList()</code> if none is not found
+	 * @see SwiftTagListBlock#getTagsByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public List<Field86D> getField86D() {
+		final List<Field86D> result = new ArrayList<Field86D>();
+		final Tag[] tags = tags("86D");
+		if (tags != null && tags.length > 0) {
+            for (Tag tag : tags) {
+                result.add(new Field86D(tag.getValue()));
+            }
+		}
+		return result;
+	}
+	
+	/**
+	 * Iterates through block4 fields and return all occurrences of fields whose names matches 86J, 
+	 * or <code>Collections.emptyList()</code> if none is found.<br>
+	 * Multiple occurrences of field 86J at MT620 are expected at one sequence or across several sequences.
+	 * 
+	 * @return a List of Field86J objects or <code>Collections.emptyList()</code> if none is not found
+	 * @see SwiftTagListBlock#getTagsByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public List<Field86J> getField86J() {
+		final List<Field86J> result = new ArrayList<Field86J>();
+		final Tag[] tags = tags("86J");
+		if (tags != null && tags.length > 0) {
+            for (Tag tag : tags) {
+                result.add(new Field86J(tag.getValue()));
+            }
+		}
+		return result;
+	}
+	
+	/**
+	 * Iterates through block4 fields and return all occurrences of fields whose names matches 56A, 
+	 * or <code>Collections.emptyList()</code> if none is found.<br>
+	 * Multiple occurrences of field 56A at MT620 are expected at one sequence or across several sequences.
+	 * 
+	 * @return a List of Field56A objects or <code>Collections.emptyList()</code> if none is not found
+	 * @see SwiftTagListBlock#getTagsByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public List<Field56A> getField56A() {
+		final List<Field56A> result = new ArrayList<Field56A>();
+		final Tag[] tags = tags("56A");
+		if (tags != null && tags.length > 0) {
+            for (Tag tag : tags) {
+                result.add(new Field56A(tag.getValue()));
+            }
+		}
+		return result;
+	}
+	
+	/**
+	 * Iterates through block4 fields and return all occurrences of fields whose names matches 56D, 
+	 * or <code>Collections.emptyList()</code> if none is found.<br>
+	 * Multiple occurrences of field 56D at MT620 are expected at one sequence or across several sequences.
+	 * 
+	 * @return a List of Field56D objects or <code>Collections.emptyList()</code> if none is not found
+	 * @see SwiftTagListBlock#getTagsByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public List<Field56D> getField56D() {
+		final List<Field56D> result = new ArrayList<Field56D>();
+		final Tag[] tags = tags("56D");
+		if (tags != null && tags.length > 0) {
+            for (Tag tag : tags) {
+                result.add(new Field56D(tag.getValue()));
+            }
+		}
+		return result;
+	}
+	
+	/**
+	 * Iterates through block4 fields and return all occurrences of fields whose names matches 56J, 
+	 * or <code>Collections.emptyList()</code> if none is found.<br>
+	 * Multiple occurrences of field 56J at MT620 are expected at one sequence or across several sequences.
+	 * 
+	 * @return a List of Field56J objects or <code>Collections.emptyList()</code> if none is not found
+	 * @see SwiftTagListBlock#getTagsByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public List<Field56J> getField56J() {
+		final List<Field56J> result = new ArrayList<Field56J>();
+		final Tag[] tags = tags("56J");
+		if (tags != null && tags.length > 0) {
+            for (Tag tag : tags) {
+                result.add(new Field56J(tag.getValue()));
+            }
+		}
+		return result;
+	}
+	
+	/**
+	 * Iterates through block4 fields and return all occurrences of fields whose names matches 57A, 
+	 * or <code>Collections.emptyList()</code> if none is found.<br>
+	 * Multiple occurrences of field 57A at MT620 are expected at one sequence or across several sequences.
+	 * 
+	 * @return a List of Field57A objects or <code>Collections.emptyList()</code> if none is not found
+	 * @see SwiftTagListBlock#getTagsByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public List<Field57A> getField57A() {
+		final List<Field57A> result = new ArrayList<Field57A>();
+		final Tag[] tags = tags("57A");
+		if (tags != null && tags.length > 0) {
+            for (Tag tag : tags) {
+                result.add(new Field57A(tag.getValue()));
+            }
+		}
+		return result;
+	}
+	
+	/**
+	 * Iterates through block4 fields and return all occurrences of fields whose names matches 57D, 
+	 * or <code>Collections.emptyList()</code> if none is found.<br>
+	 * Multiple occurrences of field 57D at MT620 are expected at one sequence or across several sequences.
+	 * 
+	 * @return a List of Field57D objects or <code>Collections.emptyList()</code> if none is not found
+	 * @see SwiftTagListBlock#getTagsByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public List<Field57D> getField57D() {
+		final List<Field57D> result = new ArrayList<Field57D>();
+		final Tag[] tags = tags("57D");
+		if (tags != null && tags.length > 0) {
+            for (Tag tag : tags) {
+                result.add(new Field57D(tag.getValue()));
+            }
+		}
+		return result;
+	}
+	
+	/**
+	 * Iterates through block4 fields and return all occurrences of fields whose names matches 57J, 
+	 * or <code>Collections.emptyList()</code> if none is found.<br>
+	 * Multiple occurrences of field 57J at MT620 are expected at one sequence or across several sequences.
+	 * 
+	 * @return a List of Field57J objects or <code>Collections.emptyList()</code> if none is not found
+	 * @see SwiftTagListBlock#getTagsByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public List<Field57J> getField57J() {
+		final List<Field57J> result = new ArrayList<Field57J>();
+		final Tag[] tags = tags("57J");
+		if (tags != null && tags.length > 0) {
+            for (Tag tag : tags) {
+                result.add(new Field57J(tag.getValue()));
+            }
+		}
+		return result;
+	}
+	
+	/**
+	 * Iterates through block4 fields and return all occurrences of fields whose names matches 58A, 
+	 * or <code>Collections.emptyList()</code> if none is found.<br>
+	 * Multiple occurrences of field 58A at MT620 are expected at one sequence or across several sequences.
+	 * 
+	 * @return a List of Field58A objects or <code>Collections.emptyList()</code> if none is not found
+	 * @see SwiftTagListBlock#getTagsByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public List<Field58A> getField58A() {
+		final List<Field58A> result = new ArrayList<Field58A>();
+		final Tag[] tags = tags("58A");
+		if (tags != null && tags.length > 0) {
+            for (Tag tag : tags) {
+                result.add(new Field58A(tag.getValue()));
+            }
+		}
+		return result;
+	}
+	
+	/**
+	 * Iterates through block4 fields and return all occurrences of fields whose names matches 58D, 
+	 * or <code>Collections.emptyList()</code> if none is found.<br>
+	 * Multiple occurrences of field 58D at MT620 are expected at one sequence or across several sequences.
+	 * 
+	 * @return a List of Field58D objects or <code>Collections.emptyList()</code> if none is not found
+	 * @see SwiftTagListBlock#getTagsByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public List<Field58D> getField58D() {
+		final List<Field58D> result = new ArrayList<Field58D>();
+		final Tag[] tags = tags("58D");
+		if (tags != null && tags.length > 0) {
+            for (Tag tag : tags) {
+                result.add(new Field58D(tag.getValue()));
+            }
+		}
+		return result;
+	}
+	
+	/**
+	 * Iterates through block4 fields and return all occurrences of fields whose names matches 58J, 
+	 * or <code>Collections.emptyList()</code> if none is found.<br>
+	 * Multiple occurrences of field 58J at MT620 are expected at one sequence or across several sequences.
+	 * 
+	 * @return a List of Field58J objects or <code>Collections.emptyList()</code> if none is not found
+	 * @see SwiftTagListBlock#getTagsByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public List<Field58J> getField58J() {
+		final List<Field58J> result = new ArrayList<Field58J>();
+		final Tag[] tags = tags("58J");
+		if (tags != null && tags.length > 0) {
+            for (Tag tag : tags) {
+                result.add(new Field58J(tag.getValue()));
+            }
+		}
+		return result;
+	}
+	
+	/**
+	 * Iterates through block4 fields and return all occurrences of fields whose names matches 33J, 
+	 * or <code>Collections.emptyList()</code> if none is found.<br>
+	 * Multiple occurrences of field 33J at MT620 are expected at one sequence or across several sequences.
+	 * 
+	 * @return a List of Field33J objects or <code>Collections.emptyList()</code> if none is not found
+	 * @see SwiftTagListBlock#getTagsByName(String)
+	 * @throws IllegalStateException if SwiftMessage object is not initialized
+	 */
+	public List<Field33J> getField33J() {
+		final List<Field33J> result = new ArrayList<Field33J>();
+		final Tag[] tags = tags("33J");
+		if (tags != null && tags.length > 0) {
+            for (Tag tag : tags) {
+                result.add(new Field33J(tag.getValue()));
+            }
+		}
+		return result;
+	}
+	
+
+// BaseSequenceCodeGenerator [seq=A]
+	/**
+	 * Class to model Sequence "A" in MT 620
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public static class SequenceA extends SwiftTagListBlock {
+		private static final long serialVersionUID = 1L;
+		
+		/**
+		 * Constructs an empty sequence
+		 */
+	    private SequenceA() {
+			super(new ArrayList<Tag>());
+		}
+
+		/**
+		 * Creates a sequence with the given content.
+		 * @see SwiftTagListBlock
+		 */
+		private SequenceA(final SwiftTagListBlock content) {
+			super(content.getTags());
+		}
+
+		public static final Tag START_TAG = Field15A.emptyTag();
+		/**
+		* Creates a new instance of this sequence with the given tags inside.
+		* @param tags may be null, an empty sequence containing only start and end sequence tags will be returned
+		* @return a new instance of the sequence, initialized with the parameter tags
+		* @since 7.7
+		*/
+		@SequenceStyle(Type.SPLIT_BY_15)
+		public static SequenceA newInstance(final Tag ... tags) {
+			final SequenceA result = new SequenceA();
+			result.append(START_TAG);
+			if (tags != null && tags.length > 0) {
+				for (final Tag t : tags) {
+					result.append(t);
+				}
+			}
+			return result;
+		}
+
+		/**
+		* Create an empty $sequenceClassname.
+		* This method is intended to avoid disambiguation for the newInstance() with variable list of blocks or tags
+		* @return a new instance of the sequence
+		* @since 7.7
+		*/
+		public static SequenceA newInstance() {
+			final SequenceA result = new SequenceA();
+			result.append(START_TAG);
+			return result;
+		}
+
+		/**
+		 * Create a new instance of $sequenceClassname and add the contents of all sequences given inside.
+		 * Mainly intended to create a sequence by adding subsequences
+		 * @param sequences a list of blocks to set as the new sequence content
+		 * @return a new instance of the sequence, initialized with the parameter sequences content
+		 * @since 7.7
+		 */
+		public static SequenceA newInstance(final SwiftTagListBlock ... sequences) {
+			final SequenceA result = new SequenceA();
+			result.append(START_TAG);
+			if (sequences != null && sequences.length > 0) {
+				for (final SwiftTagListBlock s : sequences) {
+					result.addTags(s.getTags());
+				}
+			}
+			return result;
+		}
+
+	}
+	/**
+	 * Get the single occurrence of SequenceA using field field 15 as sequence boundary.
+	 * The presence of this method indicates that this sequence can occur only once according to the Standard.
+	 *
+	 * @since 7.7
+	 * @return a new sequence that may be empty, <em>never returns null</em>
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public SequenceA getSequenceA() {
+		return getSequenceA(super.getSwiftMessageNotNullOrException().getBlock4());
+	}
+	
+	/**
+	 * Get the single occurrence of SequenceA using field field 15 as sequence boundary.
+	 * The presence of this method indicates that this sequence can occur only once according to the Standard.
+	 *
+	 * @param parentSequence an optional parent sequence or null to find SequenceA within the complete message
+	 * @return the found sequence or an empty sequence if none is found, <em>never returns null</em>
+	 * @since 7.7
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public SequenceA getSequenceA(SwiftTagListBlock parentSequence) {
+		final java.util.Map<String, SwiftTagListBlock> map = SwiftMessageUtils.splitByField15(parentSequence);
+		if (map.containsKey("A")) {
+			return new SequenceA(map.get("A"));
+		}
+		return new SequenceA();
+	}
+
+
+// BaseSequenceCodeGenerator [seq=B]
+	/**
+	 * Class to model Sequence "B" in MT 620
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public static class SequenceB extends SwiftTagListBlock {
+		private static final long serialVersionUID = 1L;
+		
+		/**
+		 * Constructs an empty sequence
+		 */
+	    private SequenceB() {
+			super(new ArrayList<Tag>());
+		}
+
+		/**
+		 * Creates a sequence with the given content.
+		 * @see SwiftTagListBlock
+		 */
+		private SequenceB(final SwiftTagListBlock content) {
+			super(content.getTags());
+		}
+
+		public static final Tag START_TAG = Field15B.emptyTag();
+		/**
+		* Creates a new instance of this sequence with the given tags inside.
+		* @param tags may be null, an empty sequence containing only start and end sequence tags will be returned
+		* @return a new instance of the sequence, initialized with the parameter tags
+		* @since 7.7
+		*/
+		@SequenceStyle(Type.SPLIT_BY_15)
+		public static SequenceB newInstance(final Tag ... tags) {
+			final SequenceB result = new SequenceB();
+			result.append(START_TAG);
+			if (tags != null && tags.length > 0) {
+				for (final Tag t : tags) {
+					result.append(t);
+				}
+			}
+			return result;
+		}
+
+		/**
+		* Create an empty $sequenceClassname.
+		* This method is intended to avoid disambiguation for the newInstance() with variable list of blocks or tags
+		* @return a new instance of the sequence
+		* @since 7.7
+		*/
+		public static SequenceB newInstance() {
+			final SequenceB result = new SequenceB();
+			result.append(START_TAG);
+			return result;
+		}
+
+		/**
+		 * Create a new instance of $sequenceClassname and add the contents of all sequences given inside.
+		 * Mainly intended to create a sequence by adding subsequences
+		 * @param sequences a list of blocks to set as the new sequence content
+		 * @return a new instance of the sequence, initialized with the parameter sequences content
+		 * @since 7.7
+		 */
+		public static SequenceB newInstance(final SwiftTagListBlock ... sequences) {
+			final SequenceB result = new SequenceB();
+			result.append(START_TAG);
+			if (sequences != null && sequences.length > 0) {
+				for (final SwiftTagListBlock s : sequences) {
+					result.addTags(s.getTags());
+				}
+			}
+			return result;
+		}
+
+	}
+	/**
+	 * Get the single occurrence of SequenceB using field field 15 as sequence boundary.
+	 * The presence of this method indicates that this sequence can occur only once according to the Standard.
+	 *
+	 * @since 7.7
+	 * @return a new sequence that may be empty, <em>never returns null</em>
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public SequenceB getSequenceB() {
+		return getSequenceB(super.getSwiftMessageNotNullOrException().getBlock4());
+	}
+	
+	/**
+	 * Get the single occurrence of SequenceB using field field 15 as sequence boundary.
+	 * The presence of this method indicates that this sequence can occur only once according to the Standard.
+	 *
+	 * @param parentSequence an optional parent sequence or null to find SequenceB within the complete message
+	 * @return the found sequence or an empty sequence if none is found, <em>never returns null</em>
+	 * @since 7.7
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public SequenceB getSequenceB(SwiftTagListBlock parentSequence) {
+		final java.util.Map<String, SwiftTagListBlock> map = SwiftMessageUtils.splitByField15(parentSequence);
+		if (map.containsKey("B")) {
+			return new SequenceB(map.get("B"));
+		}
+		return new SequenceB();
+	}
+
+
+// BaseSequenceCodeGenerator [seq=C]
+	/**
+	 * Class to model Sequence "C" in MT 620
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public static class SequenceC extends SwiftTagListBlock {
+		private static final long serialVersionUID = 1L;
+		
+		/**
+		 * Constructs an empty sequence
+		 */
+	    private SequenceC() {
+			super(new ArrayList<Tag>());
+		}
+
+		/**
+		 * Creates a sequence with the given content.
+		 * @see SwiftTagListBlock
+		 */
+		private SequenceC(final SwiftTagListBlock content) {
+			super(content.getTags());
+		}
+
+		public static final Tag START_TAG = Field15C.emptyTag();
+		/**
+		* Creates a new instance of this sequence with the given tags inside.
+		* @param tags may be null, an empty sequence containing only start and end sequence tags will be returned
+		* @return a new instance of the sequence, initialized with the parameter tags
+		* @since 7.7
+		*/
+		@SequenceStyle(Type.SPLIT_BY_15)
+		public static SequenceC newInstance(final Tag ... tags) {
+			final SequenceC result = new SequenceC();
+			result.append(START_TAG);
+			if (tags != null && tags.length > 0) {
+				for (final Tag t : tags) {
+					result.append(t);
+				}
+			}
+			return result;
+		}
+
+		/**
+		* Create an empty $sequenceClassname.
+		* This method is intended to avoid disambiguation for the newInstance() with variable list of blocks or tags
+		* @return a new instance of the sequence
+		* @since 7.7
+		*/
+		public static SequenceC newInstance() {
+			final SequenceC result = new SequenceC();
+			result.append(START_TAG);
+			return result;
+		}
+
+		/**
+		 * Create a new instance of $sequenceClassname and add the contents of all sequences given inside.
+		 * Mainly intended to create a sequence by adding subsequences
+		 * @param sequences a list of blocks to set as the new sequence content
+		 * @return a new instance of the sequence, initialized with the parameter sequences content
+		 * @since 7.7
+		 */
+		public static SequenceC newInstance(final SwiftTagListBlock ... sequences) {
+			final SequenceC result = new SequenceC();
+			result.append(START_TAG);
+			if (sequences != null && sequences.length > 0) {
+				for (final SwiftTagListBlock s : sequences) {
+					result.addTags(s.getTags());
+				}
+			}
+			return result;
+		}
+
+	}
+	/**
+	 * Get the single occurrence of SequenceC using field field 15 as sequence boundary.
+	 * The presence of this method indicates that this sequence can occur only once according to the Standard.
+	 *
+	 * @since 7.7
+	 * @return a new sequence that may be empty, <em>never returns null</em>
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public SequenceC getSequenceC() {
+		return getSequenceC(super.getSwiftMessageNotNullOrException().getBlock4());
+	}
+	
+	/**
+	 * Get the single occurrence of SequenceC using field field 15 as sequence boundary.
+	 * The presence of this method indicates that this sequence can occur only once according to the Standard.
+	 *
+	 * @param parentSequence an optional parent sequence or null to find SequenceC within the complete message
+	 * @return the found sequence or an empty sequence if none is found, <em>never returns null</em>
+	 * @since 7.7
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public SequenceC getSequenceC(SwiftTagListBlock parentSequence) {
+		final java.util.Map<String, SwiftTagListBlock> map = SwiftMessageUtils.splitByField15(parentSequence);
+		if (map.containsKey("C")) {
+			return new SequenceC(map.get("C"));
+		}
+		return new SequenceC();
+	}
+
+
+// BaseSequenceCodeGenerator [seq=D]
+	/**
+	 * Class to model Sequence "D" in MT 620
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public static class SequenceD extends SwiftTagListBlock {
+		private static final long serialVersionUID = 1L;
+		
+		/**
+		 * Constructs an empty sequence
+		 */
+	    private SequenceD() {
+			super(new ArrayList<Tag>());
+		}
+
+		/**
+		 * Creates a sequence with the given content.
+		 * @see SwiftTagListBlock
+		 */
+		private SequenceD(final SwiftTagListBlock content) {
+			super(content.getTags());
+		}
+
+		public static final Tag START_TAG = Field15D.emptyTag();
+		/**
+		* Creates a new instance of this sequence with the given tags inside.
+		* @param tags may be null, an empty sequence containing only start and end sequence tags will be returned
+		* @return a new instance of the sequence, initialized with the parameter tags
+		* @since 7.7
+		*/
+		@SequenceStyle(Type.SPLIT_BY_15)
+		public static SequenceD newInstance(final Tag ... tags) {
+			final SequenceD result = new SequenceD();
+			result.append(START_TAG);
+			if (tags != null && tags.length > 0) {
+				for (final Tag t : tags) {
+					result.append(t);
+				}
+			}
+			return result;
+		}
+
+		/**
+		* Create an empty $sequenceClassname.
+		* This method is intended to avoid disambiguation for the newInstance() with variable list of blocks or tags
+		* @return a new instance of the sequence
+		* @since 7.7
+		*/
+		public static SequenceD newInstance() {
+			final SequenceD result = new SequenceD();
+			result.append(START_TAG);
+			return result;
+		}
+
+		/**
+		 * Create a new instance of $sequenceClassname and add the contents of all sequences given inside.
+		 * Mainly intended to create a sequence by adding subsequences
+		 * @param sequences a list of blocks to set as the new sequence content
+		 * @return a new instance of the sequence, initialized with the parameter sequences content
+		 * @since 7.7
+		 */
+		public static SequenceD newInstance(final SwiftTagListBlock ... sequences) {
+			final SequenceD result = new SequenceD();
+			result.append(START_TAG);
+			if (sequences != null && sequences.length > 0) {
+				for (final SwiftTagListBlock s : sequences) {
+					result.addTags(s.getTags());
+				}
+			}
+			return result;
+		}
+
+	}
+	/**
+	 * Get the single occurrence of SequenceD using field field 15 as sequence boundary.
+	 * The presence of this method indicates that this sequence can occur only once according to the Standard.
+	 *
+	 * @since 7.7
+	 * @return a new sequence that may be empty, <em>never returns null</em>
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public SequenceD getSequenceD() {
+		return getSequenceD(super.getSwiftMessageNotNullOrException().getBlock4());
+	}
+	
+	/**
+	 * Get the single occurrence of SequenceD using field field 15 as sequence boundary.
+	 * The presence of this method indicates that this sequence can occur only once according to the Standard.
+	 *
+	 * @param parentSequence an optional parent sequence or null to find SequenceD within the complete message
+	 * @return the found sequence or an empty sequence if none is found, <em>never returns null</em>
+	 * @since 7.7
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public SequenceD getSequenceD(SwiftTagListBlock parentSequence) {
+		final java.util.Map<String, SwiftTagListBlock> map = SwiftMessageUtils.splitByField15(parentSequence);
+		if (map.containsKey("D")) {
+			return new SequenceD(map.get("D"));
+		}
+		return new SequenceD();
+	}
+
+
+// BaseSequenceCodeGenerator [seq=E]
+	/**
+	 * Class to model Sequence "E" in MT 620
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public static class SequenceE extends SwiftTagListBlock {
+		private static final long serialVersionUID = 1L;
+		
+		/**
+		 * Constructs an empty sequence
+		 */
+	    private SequenceE() {
+			super(new ArrayList<Tag>());
+		}
+
+		/**
+		 * Creates a sequence with the given content.
+		 * @see SwiftTagListBlock
+		 */
+		private SequenceE(final SwiftTagListBlock content) {
+			super(content.getTags());
+		}
+
+		public static final Tag START_TAG = Field15E.emptyTag();
+		/**
+		* Creates a new instance of this sequence with the given tags inside.
+		* @param tags may be null, an empty sequence containing only start and end sequence tags will be returned
+		* @return a new instance of the sequence, initialized with the parameter tags
+		* @since 7.7
+		*/
+		@SequenceStyle(Type.SPLIT_BY_15)
+		public static SequenceE newInstance(final Tag ... tags) {
+			final SequenceE result = new SequenceE();
+			result.append(START_TAG);
+			if (tags != null && tags.length > 0) {
+				for (final Tag t : tags) {
+					result.append(t);
+				}
+			}
+			return result;
+		}
+
+		/**
+		* Create an empty $sequenceClassname.
+		* This method is intended to avoid disambiguation for the newInstance() with variable list of blocks or tags
+		* @return a new instance of the sequence
+		* @since 7.7
+		*/
+		public static SequenceE newInstance() {
+			final SequenceE result = new SequenceE();
+			result.append(START_TAG);
+			return result;
+		}
+
+		/**
+		 * Create a new instance of $sequenceClassname and add the contents of all sequences given inside.
+		 * Mainly intended to create a sequence by adding subsequences
+		 * @param sequences a list of blocks to set as the new sequence content
+		 * @return a new instance of the sequence, initialized with the parameter sequences content
+		 * @since 7.7
+		 */
+		public static SequenceE newInstance(final SwiftTagListBlock ... sequences) {
+			final SequenceE result = new SequenceE();
+			result.append(START_TAG);
+			if (sequences != null && sequences.length > 0) {
+				for (final SwiftTagListBlock s : sequences) {
+					result.addTags(s.getTags());
+				}
+			}
+			return result;
+		}
+
+	}
+	/**
+	 * Get the single occurrence of SequenceE using field field 15 as sequence boundary.
+	 * The presence of this method indicates that this sequence can occur only once according to the Standard.
+	 *
+	 * @since 7.7
+	 * @return a new sequence that may be empty, <em>never returns null</em>
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public SequenceE getSequenceE() {
+		return getSequenceE(super.getSwiftMessageNotNullOrException().getBlock4());
+	}
+	
+	/**
+	 * Get the single occurrence of SequenceE using field field 15 as sequence boundary.
+	 * The presence of this method indicates that this sequence can occur only once according to the Standard.
+	 *
+	 * @param parentSequence an optional parent sequence or null to find SequenceE within the complete message
+	 * @return the found sequence or an empty sequence if none is found, <em>never returns null</em>
+	 * @since 7.7
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public SequenceE getSequenceE(SwiftTagListBlock parentSequence) {
+		final java.util.Map<String, SwiftTagListBlock> map = SwiftMessageUtils.splitByField15(parentSequence);
+		if (map.containsKey("E")) {
+			return new SequenceE(map.get("E"));
+		}
+		return new SequenceE();
+	}
+
+
+// BaseSequenceCodeGenerator [seq=F]
+	/**
+	 * Class to model Sequence "F" in MT 620
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public static class SequenceF extends SwiftTagListBlock {
+		private static final long serialVersionUID = 1L;
+		
+		/**
+		 * Constructs an empty sequence
+		 */
+	    private SequenceF() {
+			super(new ArrayList<Tag>());
+		}
+
+		/**
+		 * Creates a sequence with the given content.
+		 * @see SwiftTagListBlock
+		 */
+		private SequenceF(final SwiftTagListBlock content) {
+			super(content.getTags());
+		}
+
+		public static final Tag START_TAG = Field15F.emptyTag();
+		/**
+		* Creates a new instance of this sequence with the given tags inside.
+		* @param tags may be null, an empty sequence containing only start and end sequence tags will be returned
+		* @return a new instance of the sequence, initialized with the parameter tags
+		* @since 7.7
+		*/
+		@SequenceStyle(Type.SPLIT_BY_15)
+		public static SequenceF newInstance(final Tag ... tags) {
+			final SequenceF result = new SequenceF();
+			result.append(START_TAG);
+			if (tags != null && tags.length > 0) {
+				for (final Tag t : tags) {
+					result.append(t);
+				}
+			}
+			return result;
+		}
+
+		/**
+		* Create an empty $sequenceClassname.
+		* This method is intended to avoid disambiguation for the newInstance() with variable list of blocks or tags
+		* @return a new instance of the sequence
+		* @since 7.7
+		*/
+		public static SequenceF newInstance() {
+			final SequenceF result = new SequenceF();
+			result.append(START_TAG);
+			return result;
+		}
+
+		/**
+		 * Create a new instance of $sequenceClassname and add the contents of all sequences given inside.
+		 * Mainly intended to create a sequence by adding subsequences
+		 * @param sequences a list of blocks to set as the new sequence content
+		 * @return a new instance of the sequence, initialized with the parameter sequences content
+		 * @since 7.7
+		 */
+		public static SequenceF newInstance(final SwiftTagListBlock ... sequences) {
+			final SequenceF result = new SequenceF();
+			result.append(START_TAG);
+			if (sequences != null && sequences.length > 0) {
+				for (final SwiftTagListBlock s : sequences) {
+					result.addTags(s.getTags());
+				}
+			}
+			return result;
+		}
+
+	}
+	/**
+	 * Get the single occurrence of SequenceF using field field 15 as sequence boundary.
+	 * The presence of this method indicates that this sequence can occur only once according to the Standard.
+	 *
+	 * @since 7.7
+	 * @return a new sequence that may be empty, <em>never returns null</em>
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public SequenceF getSequenceF() {
+		return getSequenceF(super.getSwiftMessageNotNullOrException().getBlock4());
+	}
+	
+	/**
+	 * Get the single occurrence of SequenceF using field field 15 as sequence boundary.
+	 * The presence of this method indicates that this sequence can occur only once according to the Standard.
+	 *
+	 * @param parentSequence an optional parent sequence or null to find SequenceF within the complete message
+	 * @return the found sequence or an empty sequence if none is found, <em>never returns null</em>
+	 * @since 7.7
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public SequenceF getSequenceF(SwiftTagListBlock parentSequence) {
+		final java.util.Map<String, SwiftTagListBlock> map = SwiftMessageUtils.splitByField15(parentSequence);
+		if (map.containsKey("F")) {
+			return new SequenceF(map.get("F"));
+		}
+		return new SequenceF();
+	}
+
+
+// BaseSequenceCodeGenerator [seq=G]
+	/**
+	 * Class to model Sequence "G" in MT 620
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public static class SequenceG extends SwiftTagListBlock {
+		private static final long serialVersionUID = 1L;
+		
+		/**
+		 * Constructs an empty sequence
+		 */
+	    private SequenceG() {
+			super(new ArrayList<Tag>());
+		}
+
+		/**
+		 * Creates a sequence with the given content.
+		 * @see SwiftTagListBlock
+		 */
+		private SequenceG(final SwiftTagListBlock content) {
+			super(content.getTags());
+		}
+
+		public static final Tag START_TAG = Field15G.emptyTag();
+		/**
+		* Creates a new instance of this sequence with the given tags inside.
+		* @param tags may be null, an empty sequence containing only start and end sequence tags will be returned
+		* @return a new instance of the sequence, initialized with the parameter tags
+		* @since 7.7
+		*/
+		@SequenceStyle(Type.SPLIT_BY_15)
+		public static SequenceG newInstance(final Tag ... tags) {
+			final SequenceG result = new SequenceG();
+			result.append(START_TAG);
+			if (tags != null && tags.length > 0) {
+				for (final Tag t : tags) {
+					result.append(t);
+				}
+			}
+			return result;
+		}
+
+		/**
+		* Create an empty $sequenceClassname.
+		* This method is intended to avoid disambiguation for the newInstance() with variable list of blocks or tags
+		* @return a new instance of the sequence
+		* @since 7.7
+		*/
+		public static SequenceG newInstance() {
+			final SequenceG result = new SequenceG();
+			result.append(START_TAG);
+			return result;
+		}
+
+		/**
+		 * Create a new instance of $sequenceClassname and add the contents of all sequences given inside.
+		 * Mainly intended to create a sequence by adding subsequences
+		 * @param sequences a list of blocks to set as the new sequence content
+		 * @return a new instance of the sequence, initialized with the parameter sequences content
+		 * @since 7.7
+		 */
+		public static SequenceG newInstance(final SwiftTagListBlock ... sequences) {
+			final SequenceG result = new SequenceG();
+			result.append(START_TAG);
+			if (sequences != null && sequences.length > 0) {
+				for (final SwiftTagListBlock s : sequences) {
+					result.addTags(s.getTags());
+				}
+			}
+			return result;
+		}
+
+	}
+	/**
+	 * Get the single occurrence of SequenceG using field field 15 as sequence boundary.
+	 * The presence of this method indicates that this sequence can occur only once according to the Standard.
+	 *
+	 * @since 7.7
+	 * @return a new sequence that may be empty, <em>never returns null</em>
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public SequenceG getSequenceG() {
+		return getSequenceG(super.getSwiftMessageNotNullOrException().getBlock4());
+	}
+	
+	/**
+	 * Get the single occurrence of SequenceG using field field 15 as sequence boundary.
+	 * The presence of this method indicates that this sequence can occur only once according to the Standard.
+	 *
+	 * @param parentSequence an optional parent sequence or null to find SequenceG within the complete message
+	 * @return the found sequence or an empty sequence if none is found, <em>never returns null</em>
+	 * @since 7.7
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public SequenceG getSequenceG(SwiftTagListBlock parentSequence) {
+		final java.util.Map<String, SwiftTagListBlock> map = SwiftMessageUtils.splitByField15(parentSequence);
+		if (map.containsKey("G")) {
+			return new SequenceG(map.get("G"));
+		}
+		return new SequenceG();
+	}
+
+
+// BaseSequenceCodeGenerator [seq=G1]
+	/**
+	 * Class to model Sequence "G1" in MT 620
+	 */
+	public static class SequenceG1 extends SwiftTagListBlock {
+		private static final long serialVersionUID = 1L;
+		
+		/**
+		 * Constructs an empty sequence
+		 */
+	    private SequenceG1() {
+			super(new ArrayList<Tag>());
+		}
+
+		/**
+		 * Creates a sequence with the given content.
+		 * @see SwiftTagListBlock
+		 */
+		private SequenceG1(final SwiftTagListBlock content) {
+			super(content.getTags());
+		}
+
+		/**
+		 * First mandatory tag name of the sequence: <em>"37L"  </em>.
+		 * Array format is for cases when more than one letter options is allowed
+		 */
+		public static final String[] START = { "37L"   } ;
+
+		/**
+		 * Last mandatory tag name of the sequence: <em>"33B", "33J"  </em>
+		 * Array format is for cases when more than one letter options is allowed
+		 */
+		protected static final String[] END = { "33B", "33J"   };
+
+		/**
+		 * List of optional tags after the last mandatory tag
+		 */
+		protected static final String[] TAIL = new String[]{  };
+
+		/**
+		 * Same as {@link #newInstance(int, int, Tag...)} using zero for the indexes
+		 * @param tags the list of tags to set as sequence content
+		 * @return a new instance of the sequence, initialized with the parameter tags
+		 */
+		@SequenceStyle(Type.GENERATED_FIXED_WITH_OPTIONAL_TAIL)
+		public static SequenceG1 newInstance(final Tag ... tags) {
+			return newInstance(0, 0, tags);
+		}
+
+		/**
+		 * Creates a sequence with starting and ending tags set to the indicated tags in from the
+		 * {@link #START} and {@link #END} lists of mandatory fields, and with the content between
+		 * the starting and ending tag initialized with the given optional tags.
+		 *
+		 * @param start a zero-based index within the list of mandatory starting tags in the sequence
+		 * @param end a zero-based index within the list of mandatory ending tags in the sequence
+		 * @param tags the list of tags to set as sequence content
+		 * @return a new instance of the sequence, initialized with the parameter tags
+		 */
+		@SequenceStyle(Type.GENERATED_FIXED_WITH_OPTIONAL_TAIL)
+		public static SequenceG1 newInstance(final int start, final int end, final Tag ... tags) {
+			final SequenceG1 result = new SequenceG1();
+			result.append(new Tag(START[start], ""));
+			if (tags != null && tags.length > 0) {
+				for (final Tag t : tags) {
+					result.append(t);
+				}
+			}
+			result.append(new Tag(END[end], ""));
+			return result;
+		}
+	}
+ 	/**
+	 * Get the single occurrence of SequenceG1 delimited by leading tag and end, with an optional tail.
+	 * The presence of this method indicates that this sequence can occur only once according to the Standard.
+	 * If block 4 is empty this method returns null.
+	 *
+	 * @return the found sequence or an empty sequence if none is found
+	 * @see SwiftTagListBlock#getSubBlockDelimitedWithOptionalTail(String[], String[], String[])
+	 */
+	@SequenceStyle(Type.GENERATED_FIXED_WITH_OPTIONAL_TAIL)
+	public SequenceG1 getSequenceG1() {
+		return getSequenceG1(super.getSwiftMessageNotNullOrException().getBlock4());
+	}
+	
+	/**
+	 * Get the single occurrence of SequenceG1 delimited by leading tag and end, with an optional tail.
+	 * The presence of this method indicates that this sequence can occur only once according to the Standard.
+	 * If block 4 is empty this method returns null.
+	 *
+	 * @see SwiftTagListBlock#getSubBlockDelimitedWithOptionalTail(String[], String[], String[])
+	 * @param parentSequence an optional parent sequence or null to find SequenceG1 within the complete message
+	 * @return the found sequence or an empty sequence if none is found
+	 * @since 7.7
+	 */
+	@SequenceStyle(Type.GENERATED_FIXED_WITH_OPTIONAL_TAIL)
+	public SequenceG1 getSequenceG1(SwiftTagListBlock parentSequence) {
+		if (parentSequence != null && !parentSequence.isEmpty()) {
+			final SwiftTagListBlock content = parentSequence.getSubBlockDelimitedWithOptionalTail(SequenceG1.START, SequenceG1.END, SequenceG1.TAIL);
+			if (log.isLoggable(java.util.logging.Level.FINE)) {
+				if (content == null) {
+					log.fine("content for sequence SequenceG1: is null");
+				} else {
+					log.fine("content for sequence SequenceG1: "+content.tagNamesList());
+				}
+			}
+			if (content == null) {
+				return new SequenceG1();
+			} else {
+				return new SequenceG1(content);
+			}
+		}
+		return null;
+	}
+ 
+
+// BaseSequenceCodeGenerator [seq=H]
+	/**
+	 * Class to model Sequence "H" in MT 620
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public static class SequenceH extends SwiftTagListBlock {
+		private static final long serialVersionUID = 1L;
+		
+		/**
+		 * Constructs an empty sequence
+		 */
+	    private SequenceH() {
+			super(new ArrayList<Tag>());
+		}
+
+		/**
+		 * Creates a sequence with the given content.
+		 * @see SwiftTagListBlock
+		 */
+		private SequenceH(final SwiftTagListBlock content) {
+			super(content.getTags());
+		}
+
+		public static final Tag START_TAG = Field15H.emptyTag();
+		/**
+		* Creates a new instance of this sequence with the given tags inside.
+		* @param tags may be null, an empty sequence containing only start and end sequence tags will be returned
+		* @return a new instance of the sequence, initialized with the parameter tags
+		* @since 7.7
+		*/
+		@SequenceStyle(Type.SPLIT_BY_15)
+		public static SequenceH newInstance(final Tag ... tags) {
+			final SequenceH result = new SequenceH();
+			result.append(START_TAG);
+			if (tags != null && tags.length > 0) {
+				for (final Tag t : tags) {
+					result.append(t);
+				}
+			}
+			return result;
+		}
+
+		/**
+		* Create an empty $sequenceClassname.
+		* This method is intended to avoid disambiguation for the newInstance() with variable list of blocks or tags
+		* @return a new instance of the sequence
+		* @since 7.7
+		*/
+		public static SequenceH newInstance() {
+			final SequenceH result = new SequenceH();
+			result.append(START_TAG);
+			return result;
+		}
+
+		/**
+		 * Create a new instance of $sequenceClassname and add the contents of all sequences given inside.
+		 * Mainly intended to create a sequence by adding subsequences
+		 * @param sequences a list of blocks to set as the new sequence content
+		 * @return a new instance of the sequence, initialized with the parameter sequences content
+		 * @since 7.7
+		 */
+		public static SequenceH newInstance(final SwiftTagListBlock ... sequences) {
+			final SequenceH result = new SequenceH();
+			result.append(START_TAG);
+			if (sequences != null && sequences.length > 0) {
+				for (final SwiftTagListBlock s : sequences) {
+					result.addTags(s.getTags());
+				}
+			}
+			return result;
+		}
+
+	}
+	/**
+	 * Get the single occurrence of SequenceH using field field 15 as sequence boundary.
+	 * The presence of this method indicates that this sequence can occur only once according to the Standard.
+	 *
+	 * @since 7.7
+	 * @return a new sequence that may be empty, <em>never returns null</em>
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public SequenceH getSequenceH() {
+		return getSequenceH(super.getSwiftMessageNotNullOrException().getBlock4());
+	}
+	
+	/**
+	 * Get the single occurrence of SequenceH using field field 15 as sequence boundary.
+	 * The presence of this method indicates that this sequence can occur only once according to the Standard.
+	 *
+	 * @param parentSequence an optional parent sequence or null to find SequenceH within the complete message
+	 * @return the found sequence or an empty sequence if none is found, <em>never returns null</em>
+	 * @since 7.7
+	 */
+	@SequenceStyle(Type.SPLIT_BY_15)
+	public SequenceH getSequenceH(SwiftTagListBlock parentSequence) {
+		final java.util.Map<String, SwiftTagListBlock> map = SwiftMessageUtils.splitByField15(parentSequence);
+		if (map.containsKey("H")) {
+			return new SequenceH(map.get("H"));
+		}
+		return new SequenceH();
+	}
+
+
+
+
+}
